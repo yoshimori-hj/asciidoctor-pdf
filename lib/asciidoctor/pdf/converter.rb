@@ -1212,9 +1212,11 @@ module Asciidoctor
                   end
                 elsif (lexer = ::Rouge::Lexer.find srclang)&.tag == 'php' && !(node.option? 'mixed')
                   lexer = lexer.new start_inline: true
+                elsif lexer
+                  lexer = lexer.new
                 end
               end
-              lexer ||= ::Rouge::Lexers::PlainText
+              lexer ||= ::Rouge::Lexers::PlainText.new
               source_string, conum_mapping = extract_conums source_string if callouts_enabled
               if (node.attr? 'highlight') && !(hl_lines = (node.resolve_lines_to_highlight source_string, (node.attr 'highlight'))).empty?
                 formatter_opts[:highlight_lines] = {}.tap {|accum| hl_lines.each {|linenum| accum[linenum] = true } }
